@@ -20,11 +20,11 @@ document.getElementById("loginBtn").addEventListener("click", () => {
     return;
   }
 
-  // Save current logged-in user
+ 
   localStorage.setItem("currentUser", name);
   window.location.href = ("admin.html"),
   localStorage.setItem("user_" + name, password);
 
   alert("Registration successful! You can now login.");
-  window.location.href = "index.html"; // redirect to login page
+  window.location.href = "index.html"; 
 });
