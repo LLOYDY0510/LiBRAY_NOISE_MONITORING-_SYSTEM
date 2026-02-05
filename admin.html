@@ -12,8 +12,6 @@
 body {
   background-color: #f8f9fa;
 }
-
-/* Sidebar (desktop only) */
 .sidebar {
   height: 100vh;
   width: 220px;
@@ -36,13 +34,11 @@ body {
   background-color: #0b5ed7;
 }
 
-/* Main content */
 .main {
   margin-left: 230px;
   padding: 20px;
 }
 
-/* Hide sidebar on mobile */
 @media (max-width: 768px) {
   .sidebar {
     display: none;
@@ -53,7 +49,6 @@ body {
   }
 }
 
-/* Profile header */
 .profile-header {
   background: linear-gradient(135deg,#0a2ade,#330be3);
   color: white;
@@ -75,7 +70,7 @@ body {
 
 <body>
 
-<!-- MOBILE NAVBAR -->
+
 <nav class="navbar navbar-dark bg-primary d-md-none">
   <div class="container-fluid">
     <span class="navbar-brand">Noise Monitor</span>
@@ -85,7 +80,6 @@ body {
   </div>
 </nav>
 
-<!-- MOBILE SIDEBAR -->
 <div class="offcanvas offcanvas-start bg-primary text-white" id="mobileMenu">
   <div class="offcanvas-header">
     <h5>Menu</h5>
@@ -100,17 +94,15 @@ body {
   </div>
 </div>
 
-<!-- DESKTOP SIDEBAR -->
 <div class="sidebar d-none d-md-block">
   <h4 class="text-center mb-4">Noise Monitor</h4>
-  <a href="index.html">Dashboard</a>
+  <a href="dashboard.html">Dashboard</a>
   <a href="livemonitoring.html">Live Monitoring</a>
   <a href="noiselev.html">Noise Levels</a>
   <a href="alert.html">Alerts</a>
   <a href="set.html">Settings</a>
 </div>
 
-<!-- MAIN CONTENT -->
 <div class="main">
 
 <nav class="navbar bg-light rounded mb-4">

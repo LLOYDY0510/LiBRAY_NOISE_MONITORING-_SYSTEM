@@ -1,23 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Get logged-in user name
-    const loggedInUser = localStorage.getItem('loggedInUser');
-
-    // If not logged in, redirect to login page
+const loggedInUser = localStorage.getItem('loggedInUser');
     if(!localStorage.getItem("currentUser")) {
     alert("Please login first!");
     window.location.href = "index.html";
     }
-    // Display admin name
-    document.getElementById('adminName').textContent = loggedInUser;
-
-    // Load admin profile data (example data)
-    const adminProfile = JSON.parse(localStorage.getItem('adminProfile')) || {
+ document.getElementById('adminName').textContent = loggedInUser;
+ const adminName = localStorage.getItem("currentUser") || "Admin";
+const adminProfile = JSON.parse(localStorage.getItem('adminProfile')) || {
+   
         age: '22',
         dob: '2003-05-15',
-        address: 'Cebu City, Philippines'
+        address: 'Manolo, Philippines'
     };
-
+document.getElementById("adminName").textContent = adminName;
     document.getElementById('adminAge').textContent = adminProfile.age;
     document.getElementById('adminDOB').textContent = adminProfile.dob;
     document.getElementById('adminAddress').textContent = adminProfile.address;
