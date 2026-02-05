@@ -34,7 +34,6 @@ function updateLiveNoise(noise) {
   noiseBarEl.style.width = width + "%";
 }
 
-
 setInterval(() => {
   const simulatedNoise = Math.floor(Math.random() * 100);
   updateLiveNoise(simulatedNoise);
