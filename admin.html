@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Profile - Noise Monitoring System</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+body {
+  background-color: #f8f9fa;
+}
+
+/* Sidebar (desktop only) */
+.sidebar {
+  height: 100vh;
+  width: 220px;
+  position: fixed;
+  background-color: #0d6efd;
+  color: white;
+  padding-top: 20px;
+}
+
+.sidebar a {
+  display: block;
+  color: white;
+  padding: 12px 20px;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.sidebar a:hover {
+  background-color: #0b5ed7;
+}
+
+/* Main content */
+.main {
+  margin-left: 230px;
+  padding: 20px;
+}
+
+/* Hide sidebar on mobile */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none;
+  }
+  .main {
+    margin-left: 0;
+    padding: 15px;
+  }
+}
+
+/* Profile header */
+.profile-header {
+  background: linear-gradient(135deg,#0a2ade,#330be3);
+  color: white;
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.profile-header img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 4px solid white;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- MOBILE NAVBAR -->
+<nav class="navbar navbar-dark bg-primary d-md-none">
+  <div class="container-fluid">
+    <span class="navbar-brand">Noise Monitor</span>
+    <button class="navbar-toggler" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE SIDEBAR -->
+<div class="offcanvas offcanvas-start bg-primary text-white" id="mobileMenu">
+  <div class="offcanvas-header">
+    <h5>Menu</h5>
+    <button class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <a class="text-white d-block mb-2" href="dashboard.html">Dashboard</a>
+    <a class="text-white d-block mb-2" href="livemonitoring.html">Live Monitoring</a>
+    <a class="text-white d-block mb-2" href="noiselev.html">Noise Levels</a>
+    <a class="text-white d-block mb-2" href="alert.html">Alerts</a>
+    <a class="text-white d-block" href="set.html">Settings</a>
+  </div>
+</div>
+
+<!-- DESKTOP SIDEBAR -->
+<div class="sidebar d-none d-md-block">
+  <h4 class="text-center mb-4">Noise Monitor</h4>
+  <a href="index.html">Dashboard</a>
+  <a href="livemonitoring.html">Live Monitoring</a>
+  <a href="noiselev.html">Noise Levels</a>
+  <a href="alert.html">Alerts</a>
+  <a href="set.html">Settings</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+<nav class="navbar bg-light rounded mb-4">
+  <div class="container-fluid">
+    <span class="navbar-brand">Admin Profile</span>
+
+    <div class="dropdown">
+      <button class="btn btn-primary rounded-circle" data-bs-toggle="dropdown" style="width:44px;height:44px;">
+        <i class="bi bi-person-circle fs-4"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item active"></a>Profile</a></li>
+        <li><a class="dropdown-item text-danger" href="index.html">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="profile-header">
+  <img src="profile.jpg" alt="Admin">
+  <h4 id="adminName">System Administrator</h4>
+</div>
+
+<div class="card shadow">
+  <h5>Admin Description</h5>
+  <p><strong>Age:</strong> <span id="adminAge">—</span></p>
+  <p><strong>Date of Birth:</strong> <span id="adminDOB">—</span></p>
+  <p><strong>Address:</strong> <span id="adminAddress">—</span></p>
+</div>
+
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
