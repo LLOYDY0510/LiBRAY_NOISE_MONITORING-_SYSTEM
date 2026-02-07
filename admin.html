@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Admin Profile - Noise Monitoring System</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -12,6 +13,7 @@
 body {
   background-color: #f8f9fa;
 }
+
 .sidebar {
   height: 100vh;
   width: 220px;
@@ -80,6 +82,7 @@ body {
   </div>
 </nav>
 
+
 <div class="offcanvas offcanvas-start bg-primary text-white" id="mobileMenu">
   <div class="offcanvas-header">
     <h5>Menu</h5>
@@ -94,6 +97,7 @@ body {
   </div>
 </div>
 
+
 <div class="sidebar d-none d-md-block">
   <h4 class="text-center mb-4">Noise Monitor</h4>
   <a href="dashboard.html">Dashboard</a>
@@ -102,6 +106,7 @@ body {
   <a href="alert.html">Alerts</a>
   <a href="set.html">Settings</a>
 </div>
+
 
 <div class="main">
 
@@ -114,7 +119,7 @@ body {
         <i class="bi bi-person-circle fs-4"></i>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item active"></a>Profile</a></li>
+        <li><a class="dropdown-item active" href="#">Profile</a></li>
         <li><a class="dropdown-item text-danger" href="index.html">Logout</a></li>
       </ul>
     </div>
@@ -126,15 +131,16 @@ body {
   <h4 id="adminName">System Administrator</h4>
 </div>
 
-<div class="card shadow">
-  <h5>Admin Description</h5>
-  <p><strong>Age:</strong> <span id="adminAge">—</span></p>
-  <p><strong>Date of Birth:</strong> <span id="adminDOB">—</span></p>
-  <p><strong>Address:</strong> <span id="adminAddress">—</span></p>
+<div class="card shadow p-4">
+  <h5 class="mb-3">Admin Description</h5>
+  <p><strong>Age:</strong> <span id="adminAge"></span></p>
+  <p><strong>Date of Birth:</strong> <span id="adminDOB"></span></p>
+  <p><strong>Address:</strong> <span id="adminAddress"></span></p>
 </div>
 
 </div>
 
 <script src="admin.js"></script>
+
 </body>
 </html>
