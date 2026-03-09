@@ -1,0 +1,24 @@
+{
+  "name": "noise_monitoring",
+  "version": "1.0.0",
+  "description": "to run our system",
+  "homepage": "https://github.com/LLOYDY0510/LiBRAY_NOISE_MONITORING-_SYSTEM#readme",
+  "bugs": {
+    "url": "https://github.com/LLOYDY0510/LiBRAY_NOISE_MONITORING-_SYSTEM/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LLOYDY0510/LiBRAY_NOISE_MONITORING-_SYSTEM.git"
+  },
+  "license": "ISC",
+  "author": "john lloyd",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^40.2.1"
+  }
+}
