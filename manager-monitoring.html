@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LibraryQuiet – Live Monitoring (Manager)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="monitoring-manager.css"/>
+  <style>
+    /* ============================================================
+   LibraryQuiet – monitoring-manager.css
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#1d4ed8;--teal:#0d9488;--green:#10b981;--yellow:#f59e0b;--red:#ef4444;--bg:#f0f4f8;--sidebar:#0f172a;--sb2:#1e293b;--border:#e2e8f0;--text:#0f172a;--muted:#64748b;--light:#94a3b8;--radius:16px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR — teal accent */
+#sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;box-shadow:2px 0 24px rgba(0,0,0,.3);z-index:100;transition:width .3s}
+#sidebar.collapsed{width:68px}
+.sb-logo{padding:18px 15px;border-bottom:1px solid var(--sb2);display:flex;align-items:center;gap:12px;min-height:68px}
+.sb-logo-icon{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#0d9488,#0f766e);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sb-logo-name{color:#fff;font-weight:800;font-size:14px}.sb-logo-sub{color:#475569;font-size:11px}
+.sb-logo-text{transition:opacity .2s}
+#sidebar.collapsed .sb-logo-text{opacity:0;pointer-events:none}
+.sb-user{padding:10px 12px;border-bottom:1px solid var(--sb2)}
+.sb-user-label{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.sb-user-chip{background:var(--sb2);border-radius:10px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+.sb-av{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#0d9488,#0f766e);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;flex-shrink:0}
+.sb-av.mgr{background:linear-gradient(135deg,#0d9488,#0f766e)}
+.sb-uname{color:#e2e8f0;font-size:12px;font-weight:700}.sb-urole{color:#2dd4bf;font-size:10px;font-weight:600}
+#sidebar.collapsed .sb-user{display:none}
+nav{flex:1;padding:10px 8px;overflow-y:auto;overflow-x:hidden}
+.sb-sec{font-size:10px;color:#334155;text-transform:uppercase;letter-spacing:1px;padding:8px 12px 4px;font-weight:700}
+.sb-div{height:1px;background:var(--sb2);margin:4px 8px}
+#sidebar.collapsed .sb-sec,#sidebar.collapsed .sb-div{display:none}
+.nav-item{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;margin-bottom:2px;background:transparent;color:#64748b;font-size:13px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;text-align:left;text-decoration:none;white-space:nowrap;transition:all .2s}
+.nav-item:hover{background:var(--sb2);color:#cbd5e1}
+.nav-item.active{background:linear-gradient(90deg,rgba(13,148,136,.9),rgba(15,118,110,.8));color:#fff;font-weight:700}
+.ni{font-size:17px;width:22px;text-align:center;flex-shrink:0}.nl{transition:opacity .2s}
+#sidebar.collapsed .nl{opacity:0;width:0;overflow:hidden}
+#sidebar.collapsed .nav-item{justify-content:center;padding:10px 0}
+.nb{margin-left:auto;background:#ef4444;color:#fff;font-size:9px;font-weight:700;border-radius:20px;padding:2px 7px}
+#sidebar.collapsed .nb{display:none}
+.sb-bottom{padding:12px;border-top:1px solid var(--sb2);display:flex;align-items:center;gap:8px}
+.sb-av-lg{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#0d9488,#0f766e);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0}
+.sb-av-lg.mgr{background:linear-gradient(135deg,#0d9488,#0f766e)}
+.sb-binfo{flex:1;min-width:0;overflow:hidden;transition:opacity .2s}
+.sb-bname{color:#e2e8f0;font-size:12px;font-weight:700}.sb-brole{color:#475569;font-size:10px}
+#sidebar.collapsed .sb-binfo{opacity:0;width:0}
+.sb-logout{background:none;border:none;color:#475569;font-size:15px;text-decoration:none;padding:4px;transition:color .2s}
+.sb-logout:hover{color:#ef4444}
+.sb-toggle{background:none;border:none;color:#475569;font-size:13px;cursor:pointer;padding:4px;transition:transform .3s}
+#sidebar.collapsed .sb-toggle{transform:rotate(180deg)}
+#sidebar.collapsed .sb-logout{display:none}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.05);flex-shrink:0}
+.tb-title{font-weight:800;font-size:17px;color:var(--text)}.tb-date{font-size:11px;color:var(--light);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:12px}
+.role-badge{padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700}
+.manager-badge{background:#ccfbf1;color:#134e4a;border:1px solid #5eead4}
+.live-badge{display:flex;align-items:center;gap:6px;background:#d1fae5;padding:5px 14px;border-radius:20px}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#10b981;animation:pulse 1.5s infinite}
+.live-text{font-size:11px;font-weight:700;color:#065f46}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sensor-count{display:flex;align-items:center;gap:6px;background:#f0fdfa;border:1px solid #99f6e4;padding:5px 12px;border-radius:20px}
+.sc-icon{font-size:13px}.sc-label{font-size:11px;font-weight:600;color:#0f766e}
+#sensor-online{font-size:12px;font-weight:800;color:#0d9488}
+.tb-bell{position:relative;width:36px;height:36px;border-radius:10px;background:#f8fafc;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none}
+.tb-bc{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:8px;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-weight:700;border:2px solid #fff}
+.tb-av{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0d9488,#0f766e);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px}
+.tb-av.mgr{background:linear-gradient(135deg,#0d9488,#0f766e)}
+
+#content{flex:1;overflow-y:auto;padding:24px;animation:pageIn .35s ease}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* OVERALL CARD */
+.overall-card{background:#fff;border-radius:var(--radius);padding:28px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin-bottom:24px;display:flex;align-items:center;gap:40px}
+.ov-label{font-size:11px;color:var(--light);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:10px}
+.ov-db{font-size:56px;font-weight:900;line-height:1;transition:color .5s}
+.ov-status{font-size:14px;font-weight:700;margin-top:8px;transition:color .5s;margin-bottom:16px}
+.ov-right{flex:1}
+
+/* MANAGER ACTIONS — no admin controls */
+.mgr-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.ma-btn{padding:7px 16px;background:#f0fdfa;border:1.5px solid #99f6e4;border-radius:8px;font-size:12px;font-weight:700;color:#0d9488;text-decoration:none;transition:all .2s}
+.ma-btn:hover{background:#ccfbf1}
+
+.meter-labels-top{display:flex;justify-content:space-between;font-size:10px;color:var(--light);font-weight:600;margin-bottom:6px}
+.meter-track{height:22px;border-radius:12px;overflow:visible;position:relative;margin-bottom:8px;background:#f1f5f9}
+.meter-zones{position:absolute;inset:0;border-radius:12px;overflow:hidden;display:flex}
+.mz{height:100%}
+.quiet-zone{width:44.4%;background:rgba(16,185,129,.15)}
+.moderate-zone{width:22.2%;background:rgba(245,158,11,.15)}
+.loud-zone{width:33.4%;background:rgba(239,68,68,.15)}
+.meter-fill{position:absolute;top:0;left:0;height:100%;border-radius:12px;transition:width 1.2s ease,background .5s;opacity:.7}
+.meter-needle{position:absolute;top:-6px;bottom:-6px;width:4px;border-radius:2px;background:#0f172a;box-shadow:0 0 8px rgba(0,0,0,.4);transition:left 1.2s ease}
+.meter-needle::after{content:'';position:absolute;top:-4px;left:-5px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:8px solid #0f172a}
+.meter-labels-bot{display:flex;justify-content:space-between;font-size:10px;color:var(--light)}
+.ov-legend{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap}
+.ol{font-size:11px;font-weight:600}
+.green-text{color:#10b981}.yellow-text{color:#f59e0b}.red-text{color:#ef4444}
+
+.section-label{font-size:12px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.sl-note{font-size:11px;font-weight:500;color:#0f766e;background:#f0fdfa;padding:2px 10px;border-radius:20px;text-transform:none;letter-spacing:0;border:1px solid #99f6e4}
+
+.zone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.zone-card{background:#fff;border-radius:var(--radius);padding:20px;border:2px solid;box-shadow:0 1px 8px rgba(0,0,0,.06);transition:all .4s ease}
+.zone-card.quiet{border-color:#a7f3d0;background:linear-gradient(135deg,#f0fdf4,#fff)}
+.zone-card.moderate{border-color:#fde68a;background:linear-gradient(135deg,#fffdf0,#fff)}
+.zone-card.loud{border-color:#fca5a5;background:linear-gradient(135deg,#fff5f5,#fff);animation:loudPulse 2s infinite}
+@keyframes loudPulse{0%,100%{box-shadow:0 0 0 rgba(239,68,68,0)}50%{box-shadow:0 0 16px rgba(239,68,68,.2)}}
+.zc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+.zc-name{font-weight:800;font-size:14px;color:#1e293b;margin-bottom:2px}.zc-floor{font-size:11px;color:var(--light)}
+.zc-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700;text-transform:uppercase}
+.zc-db-row{display:flex;align-items:flex-end;gap:6px;margin-bottom:10px}
+.zc-db{font-size:48px;font-weight:900;line-height:1;transition:color .5s}
+.zc-unit{font-size:16px;font-weight:600;color:var(--muted);padding-bottom:6px}
+.zc-bar-track{height:8px;background:rgba(0,0,0,.07);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.zc-bar-fill{height:100%;border-radius:4px;transition:width 1.2s ease,background .5s}
+.zc-footer{display:flex;justify-content:space-between;align-items:center}
+.zc-occ{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.zc-pulse{width:8px;height:8px;border-radius:50%;animation:pulse 1.5s infinite}
+.zc-limit{font-size:10px;color:var(--light);font-family:'JetBrains Mono',monospace}
+
+.card{background:#fff;border-radius:var(--radius);padding:22px;box-shadow:0 1px 8px rgba(0,0,0,.07)}
+.card-title{font-weight:800;font-size:15px;color:var(--text);margin-bottom:4px}
+.card-sub{font-size:12px;color:var(--light);margin-bottom:18px}.card-sub.mb0{margin-bottom:0}
+.card-head-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.all-online-badge{display:flex;align-items:center;gap:6px;background:#d1fae5;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;color:#065f46}
+
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:2px solid #f1f5f9}
+th{text-align:left;padding:8px 12px;font-size:11px;color:var(--light);font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+tbody tr{border-bottom:1px solid #f8fafc;transition:background .15s}
+tbody tr:hover{background:#fafbfc}
+td{padding:11px 12px;font-size:13px}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.b-green{background:#d1fae5;color:#065f46}.b-red{background:#fee2e2;color:#991b1b}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600}
+.batt-wrap{display:flex;align-items:center;gap:6px}
+.batt-bar{width:40px;height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden}
+.batt-fill{height:100%;border-radius:4px}.batt-pct{font-size:11px;font-weight:700}
+
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.15);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none;font-family:'Plus Jakarta Sans',sans-serif}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#065f46;color:#d1fae5}.toast.info{background:#134e4a;color:#ccfbf1}
+
+@media(max-width:1200px){.zone-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.overall-card{flex-direction:column;gap:20px}}
+@media(max-width:640px){.zone-grid{grid-template-columns:1fr}#content{padding:16px}}
+  </style>
+</head>
+<body>
+
+  <aside id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">📡</div>
+      <div class="sb-logo-text"><div class="sb-logo-name">LibraryQuiet</div><div class="sb-logo-sub">Noise Monitor v1.0</div></div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-user-label">Logged in as</div>
+      <div class="sb-user-chip">
+        <div class="sb-av mgr">M</div>
+        <div><div class="sb-uname">Maria Santos</div><div class="sb-urole">📋 Library Manager</div></div>
+      </div>
+    </div>
+    <nav>
+      <div class="sb-sec">Main</div>
+      <a class="nav-item" href="manager.html"><span class="ni">⊞</span><span class="nl">Dashboard</span></a>
+      <a class="nav-item active" href="manager-monitoring.html"><span class="ni">◎</span><span class="nl">Live Monitoring</span></a>
+      <div class="sb-div"></div>
+      <div class="sb-sec">Management</div>
+      <a class="nav-item" href="Alerts-manager.html"><span class="ni">⚑</span><span class="nl">Alert Logs</span><span class="nb" id="alert-nb">0</span></a>
+      <a class="nav-item" href="manager-report.html"><span class="ni">▤</span><span class="nl">Reports</span></a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-av-lg mgr">M</div>
+      <div class="sb-binfo"><div class="sb-bname">Maria Santos</div><div class="sb-brole">Library Manager</div></div>
+      <a class="sb-logout" href="login.html" title="Logout">⏻</a>
+      <button class="sb-toggle" onclick="toggleSidebar()">◀</button>
+    </div>
+  </aside>
+
+  <div id="main">
+    <header id="topbar">
+      <div>
+        <div class="tb-title">Live Monitoring</div>
+        <div class="tb-date" id="tb-date">Loading...</div>
+      </div>
+      <div class="tb-right">
+        <div class="role-badge manager-badge">📋 Library Manager</div>
+        <div class="live-badge"><span class="live-dot"></span><span class="live-text">LIVE</span></div>
+        <div class="sensor-count"><span class="sc-icon">📡</span><span id="sensor-online">6/6</span><span class="sc-label">Sensors Online</span></div>
+        <a class="tb-bell" href="Alerts-manager.html">🔔<span class="tb-bc" id="bell-count">0</span></a>
+        <div class="tb-av mgr">M</div>
+      </div>
+    </header>
+
+    <div id="content">
+
+      <!-- OVERALL METER -->
+      <div class="overall-card">
+        <div class="ov-left">
+          <div class="ov-label">Overall Library Noise</div>
+          <div class="ov-db" id="ov-db">-- dB</div>
+          <div class="ov-status" id="ov-status">Loading...</div>
+          <!-- MANAGER: quick links only, no admin controls -->
+          <div class="mgr-actions">
+            <a class="ma-btn" href="alerts.html">⚑ View Alerts</a>
+            <a class="ma-btn" href="reports.html">▤ Reports</a>
+          </div>
+        </div>
+        <div class="ov-right">
+          <div class="meter-labels-top"><span>Quiet</span><span>Moderate</span><span>Loud</span></div>
+          <div class="meter-track">
+            <div class="meter-zones">
+              <div class="mz quiet-zone"></div>
+              <div class="mz moderate-zone"></div>
+              <div class="mz loud-zone"></div>
+            </div>
+            <div class="meter-fill" id="meter-fill"></div>
+            <div class="meter-needle" id="meter-needle"></div>
+          </div>
+          <div class="meter-labels-bot"><span>0 dB</span><span>30</span><span>60</span><span>90 dB</span></div>
+          <div class="ov-legend">
+            <span class="ol green-text">● Quiet &lt;40 dB</span>
+            <span class="ol yellow-text">● Moderate 40–60 dB</span>
+            <span class="ol red-text">● Loud &gt;60 dB</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ZONE CARDS -->
+      <div class="section-label">Zone Readings <span class="sl-note">View only — contact admin to modify zones</span></div>
+      <div class="zone-grid" id="zone-grid"></div>
+
+      <!-- SENSOR TABLE — view only, no action column -->
+      <div class="card" style="margin-top:16px;">
+        <div class="card-head-row">
+          <div><div class="card-title">Sensor Status</div><div class="card-sub mb0">All connected noise sensor devices</div></div>
+          <div class="all-online-badge"><span class="live-dot"></span> All Sensors Online</div>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Sensor ID</th><th>Zone</th><th>Floor</th><th>Current Reading</th><th>Status</th><th>Battery</th><th>Last Ping</th></tr>
+            </thead>
+            <tbody id="sensor-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="app-data.js"></script>
+  <script src="manager-monitor.js"></script>
+</body>
+</html>

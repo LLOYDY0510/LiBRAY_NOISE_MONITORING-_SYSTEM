@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LibraryQuiet – Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="settings.css"/>
+  <style>
+    /* ============================================================
+   LibraryQuiet – settings.css
+   ============================================================ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#1d4ed8;--blue2:#3b82f6;--green:#10b981;--yellow:#f59e0b;--red:#ef4444;--bg:#f0f4f8;--sidebar:#0f172a;--sb2:#1e293b;--border:#e2e8f0;--text:#0f172a;--muted:#64748b;--light:#94a3b8;--radius:16px}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+#sidebar{width:240px;background:var(--sidebar);display:flex;flex-direction:column;flex-shrink:0;box-shadow:2px 0 24px rgba(0,0,0,.3);z-index:100;transition:width .3s}
+#sidebar.collapsed{width:68px}
+.sb-logo{padding:18px 15px;border-bottom:1px solid var(--sb2);display:flex;align-items:center;gap:12px;min-height:68px}
+.sb-logo-icon{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.sb-logo-name{color:#fff;font-weight:800;font-size:14px}.sb-logo-sub{color:#475569;font-size:11px}
+.sb-logo-text{transition:opacity .2s}
+#sidebar.collapsed .sb-logo-text{opacity:0;pointer-events:none}
+.sb-user{padding:10px 12px;border-bottom:1px solid var(--sb2)}
+.sb-user-label{font-size:10px;color:#475569;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.sb-user-chip{background:var(--sb2);border-radius:10px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+.sb-av{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:12px;flex-shrink:0}
+.sb-uname{color:#e2e8f0;font-size:12px;font-weight:700}.sb-urole{color:#f59e0b;font-size:10px;font-weight:600}
+#sidebar.collapsed .sb-user{display:none}
+nav{flex:1;padding:10px 8px;overflow-y:auto;overflow-x:hidden}
+.sb-sec{font-size:10px;color:#334155;text-transform:uppercase;letter-spacing:1px;padding:8px 12px 4px;font-weight:700}
+.sb-div{height:1px;background:var(--sb2);margin:4px 8px}
+#sidebar.collapsed .sb-sec,#sidebar.collapsed .sb-div{display:none}
+.nav-item{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;margin-bottom:2px;background:transparent;color:#64748b;font-size:13px;font-weight:500;font-family:'Plus Jakarta Sans',sans-serif;text-align:left;text-decoration:none;white-space:nowrap;transition:all .2s}
+.nav-item:hover{background:var(--sb2);color:#cbd5e1}
+.nav-item.active{background:linear-gradient(90deg,rgba(29,78,216,.9),rgba(37,99,235,.8));color:#fff;font-weight:700}
+.ni{font-size:17px;width:22px;text-align:center;flex-shrink:0}.nl{transition:opacity .2s}
+#sidebar.collapsed .nl{opacity:0;width:0;overflow:hidden}
+#sidebar.collapsed .nav-item{justify-content:center;padding:10px 0}
+.nb{margin-left:auto;background:#ef4444;color:#fff;font-size:9px;font-weight:700;border-radius:20px;padding:2px 7px}
+#sidebar.collapsed .nb{display:none}
+.sb-bottom{padding:12px;border-top:1px solid var(--sb2);display:flex;align-items:center;gap:8px}
+.sb-av-lg{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex-shrink:0}
+.sb-binfo{flex:1;min-width:0;overflow:hidden;transition:opacity .2s}
+.sb-bname{color:#e2e8f0;font-size:12px;font-weight:700}.sb-brole{color:#475569;font-size:10px}
+#sidebar.collapsed .sb-binfo{opacity:0;width:0}
+.sb-logout{background:none;border:none;color:#475569;font-size:15px;text-decoration:none;padding:4px;transition:color .2s}
+.sb-logout:hover{color:#ef4444}
+.sb-toggle{background:none;border:none;color:#475569;font-size:13px;cursor:pointer;padding:4px;transition:transform .3s}
+#sidebar.collapsed .sb-toggle{transform:rotate(180deg)}
+#sidebar.collapsed .sb-logout{display:none}
+
+/* MAIN */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 8px rgba(0,0,0,.05);flex-shrink:0}
+.tb-title{font-weight:800;font-size:17px;color:var(--text)}.tb-date{font-size:11px;color:var(--light);margin-top:1px}
+.tb-right{display:flex;align-items:center;gap:12px}
+.role-badge{padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700}
+.admin-badge{background:#fef9c3;color:#713f12;border:1px solid #fde047}
+.tb-bell{position:relative;width:36px;height:36px;border-radius:10px;background:#f8fafc;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none}
+.tb-bc{position:absolute;top:-4px;right:-4px;background:#ef4444;color:#fff;font-size:8px;border-radius:50%;width:15px;height:15px;display:flex;align-items:center;justify-content:center;font-weight:700;border:2px solid #fff}
+.tb-av{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1d4ed8,#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:14px}
+#content{flex:1;overflow-y:auto;padding:24px;animation:pageIn .35s ease}
+#content::-webkit-scrollbar{width:5px}
+#content::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:5px}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* TABS */
+.tabs-bar{display:flex;gap:4px;background:#fff;border-radius:var(--radius);padding:6px;box-shadow:0 1px 8px rgba(0,0,0,.07);margin-bottom:20px;flex-wrap:wrap}
+.tab{flex:1;min-width:140px;padding:10px 16px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:var(--muted);font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;white-space:nowrap}
+.tab:hover{background:#f1f5f9;color:var(--text)}
+.tab.active{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;box-shadow:0 2px 8px rgba(59,130,246,.35)}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:pageIn .25s ease}
+
+/* PANEL HEADER */
+.panel-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.panel-title{font-weight:800;font-size:16px;color:var(--text);margin-bottom:4px}
+.panel-sub{font-size:12px;color:var(--light)}
+.panel-actions{display:flex;gap:10px;align-items:center}
+
+/* CARDS */
+.card{background:#fff;border-radius:var(--radius);padding:22px;box-shadow:0 1px 8px rgba(0,0,0,.07)}
+.mb16{margin-bottom:16px}
+.card-title{font-weight:800;font-size:15px;color:var(--text);margin-bottom:4px}
+.card-sub{font-size:12px;color:var(--light);margin-bottom:18px}
+
+/* PRESET GRID */
+.preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.preset-card{background:#f8fafc;border:2px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all .2s;text-align:center}
+.preset-card:hover{border-color:#3b82f6;background:#eff6ff;transform:translateY(-2px);box-shadow:0 4px 14px rgba(59,130,246,.15)}
+.preset-icon{font-size:28px;margin-bottom:8px}
+.preset-name{font-weight:800;font-size:13px;color:var(--text);margin-bottom:5px}
+.preset-vals{font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+/* ZONE THRESHOLD LIST */
+.zt-row{display:grid;grid-template-columns:1fr 160px 160px 120px;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid #f1f5f9}
+.zt-row:last-child{border-bottom:none}
+.zt-name{font-weight:800;font-size:13px;color:var(--text)}
+.zt-floor{font-size:11px;color:var(--light);margin-top:2px}
+.zt-field{display:flex;flex-direction:column;gap:4px}
+.zt-label{font-size:10px;color:var(--light);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.zt-input-wrap{display:flex;align-items:center;gap:6px}
+.zt-input{width:80px;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:700;outline:none;background:#f8fafc;color:var(--text);transition:all .2s}
+.zt-input:focus{border-color:var(--blue2);background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+.zt-unit{font-size:11px;color:var(--light);font-weight:700}
+.zt-live{font-family:'JetBrains Mono',monospace;font-weight:900;font-size:16px}
+
+/* SETTINGS GRID */
+.settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* SETTING ROW */
+.setting-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #f8fafc;gap:20px}
+.setting-row:last-of-type{border-bottom:none}
+.sr-info{flex:1;min-width:0}
+.sr-label{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
+.sr-desc{font-size:11px;color:var(--light);line-height:1.4}
+.setting-select{padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;background:#f8fafc;color:var(--text);cursor:pointer;flex-shrink:0}
+.setting-input{padding:7px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;background:#f8fafc;color:var(--text);width:220px;flex-shrink:0}
+.setting-input:focus,.setting-select:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(59,130,246,.08)}
+
+/* TOGGLE */
+.toggle{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:#e2e8f0;border-radius:24px;cursor:pointer;transition:all .3s}
+.toggle-slider::before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:all .3s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle input:checked+.toggle-slider{background:var(--blue2)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(20px)}
+
+/* NUMBER INPUT */
+.num-input-wrap{display:flex;align-items:center;gap:4px;flex-shrink:0}
+.num-input-wrap button{width:28px;height:28px;border:1.5px solid var(--border);border-radius:7px;background:#f8fafc;color:var(--text);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;font-weight:700}
+.num-input-wrap button:hover{background:#e2e8f0}
+.num-input{width:52px;padding:5px 8px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:700;text-align:center;outline:none;background:#f8fafc;color:var(--text)}
+.num-input:focus{border-color:var(--blue2)}
+.num-unit{font-size:11px;color:var(--light);font-weight:700;margin-left:4px}
+
+/* SENSOR TABLE */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:2px solid #f1f5f9}
+th{text-align:left;padding:10px 12px;font-size:11px;color:var(--light);font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
+tbody tr{border-bottom:1px solid #f8fafc;transition:background .15s}
+tbody tr:hover{background:#fafbfc}
+td{padding:12px 12px;font-size:13px}
+.mono{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--muted)}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.b-green{background:#d1fae5;color:#065f46}.b-red{background:#fee2e2;color:#991b1b}
+.b-gray{background:#f1f5f9;color:#64748b}.b-yellow{background:#fef3c7;color:#92400e}
+.tbl-btn{padding:5px 14px;border:none;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;background:#eff6ff;color:#1d4ed8}
+.tbl-btn:hover{background:#dbeafe}
+
+/* DATA ACTIONS */
+.data-action-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid #f8fafc;gap:16px}
+.data-action-row:last-child{border-bottom:none}
+.danger-row{background:#fff5f5;border-radius:10px;padding:14px;margin-top:8px;border:1.5px dashed #fca5a5}
+.dar-info{flex:1}
+.dar-label{font-weight:700;font-size:13px;color:var(--text);margin-bottom:3px}
+.dar-desc{font-size:11px;color:var(--light)}
+.btn-danger-sm{padding:6px 14px;background:#ef4444;border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;transition:all .2s}
+.btn-danger-sm:hover{background:#dc2626}
+.btn-warn-sm{padding:6px 14px;background:#f59e0b;border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;transition:all .2s}
+.btn-warn-sm:hover{background:#d97706}
+
+/* SYSINFO GRID */
+.sysinfo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.si-card{background:#f8fafc;border-radius:12px;padding:14px 16px;border:1px solid var(--border)}
+.si-label{font-size:10px;color:var(--light);text-transform:uppercase;letter-spacing:.5px;font-weight:700;margin-bottom:6px}
+.si-val{font-size:14px;font-weight:800;color:var(--text)}
+.si-sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* BUTTONS */
+.btn-primary{padding:9px 20px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;box-shadow:0 2px 8px rgba(59,130,246,.35)}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-secondary{padding:9px 16px;background:#f1f5f9;border:1.5px solid var(--border);border-radius:10px;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+.btn-secondary:hover{background:#e2e8f0}
+.btn-danger{padding:9px 20px;background:linear-gradient(135deg,#ef4444,#dc2626);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:200}
+.modal-overlay.show{display:block}
+.modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-48%);width:420px;max-width:95vw;max-height:90vh;background:#fff;border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.2);z-index:300;flex-direction:column;overflow:hidden;animation:slideUp .3s cubic-bezier(.16,1,.3,1)}
+.modal-sm{width:420px}
+.modal.show{display:flex}
+@keyframes slideUp{from{opacity:0;transform:translate(-50%,-44%)}to{opacity:1;transform:translate(-50%,-48%)}}
+.modal-header{padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0}
+.modal-title{font-weight:800;font-size:16px;color:var(--text)}.modal-sub{font-size:12px;color:var(--light);margin-top:2px}
+.modal-close{background:#f1f5f9;border:none;width:30px;height:30px;border-radius:8px;cursor:pointer;font-size:13px;color:var(--muted)}
+.modal-close:hover{background:#fee2e2;color:#ef4444}
+.modal-body{padding:22px 24px;overflow-y:auto;flex:1}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;padding:12px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:999;box-shadow:0 4px 20px rgba(0,0,0,.15);transform:translateY(20px);opacity:0;transition:all .3s;pointer-events:none;font-family:'Plus Jakarta Sans',sans-serif}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#065f46;color:#d1fae5}.toast.error{background:#991b1b;color:#fee2e2}.toast.info{background:#1e3a5f;color:#bfdbfe}
+
+@media(max-width:1100px){.settings-grid{grid-template-columns:1fr}.sysinfo-grid{grid-template-columns:repeat(2,1fr)}.preset-grid{grid-template-columns:1fr}}
+@media(max-width:768px){#content{padding:16px}.tabs-bar{flex-wrap:wrap}.zt-row{grid-template-columns:1fr 1fr;row-gap:10px}}
+  </style>
+</head>
+<body>
+
+  <aside id="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-icon">📡</div>
+      <div class="sb-logo-text"><div class="sb-logo-name">LibraryQuiet</div><div class="sb-logo-sub">Noise Monitor v1.0</div></div>
+    </div>
+    <div class="sb-user">
+      <div class="sb-user-label">Logged in as</div>
+      <div class="sb-user-chip">
+        <div class="sb-av">J</div>
+        <div><div class="sb-uname">Juan dela Cruz</div><div class="sb-urole">👑 Administrator</div></div>
+      </div>
+    </div>
+    <nav>
+      <div class="sb-sec">Main</div>
+      <a class="nav-item" href="admin.html"><span class="ni">⊞</span><span class="nl">Dashboard</span></a>
+      <a class="nav-item" href="admin-monitoring.html"><span class="ni">◎</span><span class="nl">Live Monitoring</span></a>
+      <div class="sb-div"></div>
+      <div class="sb-sec">Management</div>
+      <a class="nav-item" href="zone.html"><span class="ni">▦</span><span class="nl">Zone Management</span></a>
+      <a class="nav-item" href="alert-admin.html"><span class="ni">⚑</span><span class="nl">Alert Logs</span><span class="nb" id="alert-nb">0</span></a>
+      <a class="nav-item" href="reports-admin.html"><span class="ni">▤</span><span class="nl">Reports</span></a>
+      <div class="sb-div"></div>
+      <div class="sb-sec">Admin Only</div>
+      <a class="nav-item" href="user.html"><span class="ni">◉</span><span class="nl">User Management</span></a>
+      <a class="nav-item active" href="settings.html"><span class="ni">⚙</span><span class="nl">Settings</span></a>
+    </nav>
+    <div class="sb-bottom">
+      <div class="sb-av-lg">J</div>
+      <div class="sb-binfo"><div class="sb-bname">JOHN LLOYD P.z</div><div class="sb-brole">Administrator</div></div>
+      <a class="sb-logout" href="login.html" title="Logout">⏻</a>
+      <button class="sb-toggle" onclick="toggleSidebar()">◀</button>
+    </div>
+  </aside>
+
+  <div id="main">
+    <header id="topbar">
+      <div>
+        <div class="tb-title">Settings</div>
+        <div class="tb-date" id="tb-date">Loading...</div>
+      </div>
+      <div class="tb-right">
+        <div class="role-badge admin-badge">👑 Admin Only</div>
+        <a class="tb-bell" href="alert-admin.html">🔔<span class="tb-bc" id="bell-count">0</span></a>
+        <div class="tb-av">J</div>
+      </div>
+    </header>
+
+    <div id="content">
+
+      <!-- SETTINGS TABS -->
+      <div class="tabs-bar">
+        <button class="tab active" onclick="switchTab('noise',this)">🔊 Noise Thresholds</button>
+        <button class="tab" onclick="switchTab('alerts',this)">⚑ Alert Settings</button>
+        <button class="tab" onclick="switchTab('sensors',this)">📡 Sensor Config</button>
+        <button class="tab" onclick="switchTab('system',this)">⚙ System</button>
+      </div>
+
+      <!-- ── TAB: NOISE THRESHOLDS ── -->
+      <div class="tab-panel active" id="tab-noise">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Noise Threshold Settings</div>
+            <div class="panel-sub">Configure dB levels that trigger warning and critical alerts per zone</div>
+          </div>
+          <div class="panel-actions">
+            <button class="btn-secondary" onclick="resetThresholds()">↺ Reset to Defaults</button>
+            <button class="btn-primary"   onclick="saveThresholds()">💾 Save Thresholds</button>
+          </div>
+        </div>
+
+        <!-- GLOBAL PRESETS -->
+        <div class="card mb16">
+          <div class="card-title">Global Presets</div>
+          <div class="card-sub">Apply a threshold profile to all zones at once</div>
+          <div class="preset-grid">
+            <div class="preset-card" onclick="applyPreset('strict')">
+              <div class="preset-icon">🔇</div>
+              <div class="preset-name">Strict — Silent Library</div>
+              <div class="preset-vals">Warn: 30 dB &nbsp;·&nbsp; Critical: 45 dB</div>
+            </div>
+            <div class="preset-card" onclick="applyPreset('standard')">
+              <div class="preset-icon">📚</div>
+              <div class="preset-name">Standard — Study Library</div>
+              <div class="preset-vals">Warn: 40 dB &nbsp;·&nbsp; Critical: 60 dB</div>
+            </div>
+            <div class="preset-card" onclick="applyPreset('relaxed')">
+              <div class="preset-icon">☕</div>
+              <div class="preset-name">Relaxed — Open Library</div>
+              <div class="preset-vals">Warn: 55 dB &nbsp;·&nbsp; Critical: 75 dB</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PER-ZONE THRESHOLDS -->
+        <div class="card">
+          <div class="card-title">Per-Zone Thresholds</div>
+          <div class="card-sub">Fine-tune thresholds for each individual zone</div>
+          <div id="zone-thresh-list"></div>
+        </div>
+      </div>
+
+      <!-- ── TAB: ALERT SETTINGS ── -->
+      <div class="tab-panel" id="tab-alerts">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Alert Configuration</div>
+            <div class="panel-sub">Control how and when alerts are triggered and escalated</div>
+          </div>
+          <button class="btn-primary" onclick="saveAlertSettings()">💾 Save Alert Settings</button>
+        </div>
+
+        <div class="settings-grid">
+          <!-- ALERT BEHAVIOR -->
+          <div class="card">
+            <div class="card-title">Alert Behavior</div>
+            <div class="card-sub">How alerts are generated</div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Auto-generate alerts</div>
+                <div class="sr-desc">Automatically create an alert when threshold is exceeded</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-auto-alert" checked/><span class="toggle-slider"></span></label>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Consecutive readings required</div>
+                <div class="sr-desc">Number of readings above threshold before alert fires</div>
+              </div>
+              <select class="setting-select" id="s-consec">
+                <option value="1">1 reading</option>
+                <option value="2" selected>2 readings</option>
+                <option value="3">3 readings</option>
+                <option value="5">5 readings</option>
+              </select>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Alert cooldown period</div>
+                <div class="sr-desc">Minimum time between repeated alerts for same zone</div>
+              </div>
+              <select class="setting-select" id="s-cooldown">
+                <option value="1">1 minute</option>
+                <option value="5" selected>5 minutes</option>
+                <option value="10">10 minutes</option>
+                <option value="30">30 minutes</option>
+              </select>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Alert sound notification</div>
+                <div class="sr-desc">Play a sound when a critical alert fires</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-sound" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+
+          <!-- ESCALATION -->
+          <div class="card">
+            <div class="card-title">Escalation Rules</div>
+            <div class="card-sub">When to escalate unresolved alerts</div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Auto-escalate to Admin</div>
+                <div class="sr-desc">Notify admin if alert stays active past threshold time</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-escalate" checked/><span class="toggle-slider"></span></label>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Escalation timeout</div>
+                <div class="sr-desc">Escalate if unresolved after this duration</div>
+              </div>
+              <select class="setting-select" id="s-esc-time">
+                <option value="5">5 minutes</option>
+                <option value="10" selected>10 minutes</option>
+                <option value="15">15 minutes</option>
+                <option value="30">30 minutes</option>
+              </select>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Silence all alerts</div>
+                <div class="sr-desc">Temporarily suppress all new alert notifications</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-silence"/><span class="toggle-slider"></span></label>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Auto-resolve after quiet period</div>
+                <div class="sr-desc">Automatically resolve alert when zone returns to normal</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-autoresolve"/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: SENSOR CONFIG ── -->
+      <div class="tab-panel" id="tab-sensors">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Sensor Configuration</div>
+            <div class="panel-sub">Manage sensor polling, calibration, and assignment</div>
+          </div>
+          <button class="btn-primary" onclick="saveSensorSettings()">💾 Save Sensor Settings</button>
+        </div>
+
+        <div class="settings-grid">
+          <!-- POLLING -->
+          <div class="card">
+            <div class="card-title">Polling & Refresh</div>
+            <div class="card-sub">How often data is read from sensors</div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Data polling interval</div>
+                <div class="sr-desc">How often sensor readings are collected</div>
+              </div>
+              <select class="setting-select" id="s-poll">
+                <option value="1">Every 1 second</option>
+                <option value="3" selected>Every 3 seconds</option>
+                <option value="5">Every 5 seconds</option>
+                <option value="10">Every 10 seconds</option>
+                <option value="30">Every 30 seconds</option>
+              </select>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Dashboard refresh rate</div>
+                <div class="sr-desc">How often the live dashboard updates</div>
+              </div>
+              <select class="setting-select" id="s-refresh">
+                <option value="1">1 second</option>
+                <option value="3" selected>3 seconds</option>
+                <option value="5">5 seconds</option>
+                <option value="10">10 seconds</option>
+              </select>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Noise fluctuation simulation</div>
+                <div class="sr-desc">Simulate realistic dB variations for demo mode</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-fluctuate" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+
+          <!-- CALIBRATION -->
+          <div class="card">
+            <div class="card-title">Calibration & Offsets</div>
+            <div class="card-sub">Adjust sensor readings for accuracy</div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Global dB offset</div>
+                <div class="sr-desc">Add or subtract dB from all sensor readings</div>
+              </div>
+              <div class="num-input-wrap">
+                <button onclick="nudge('s-offset',-1)">−</button>
+                <input type="number" class="num-input" id="s-offset" value="0" min="-20" max="20"/>
+                <button onclick="nudge('s-offset',1)">＋</button>
+                <span class="num-unit">dB</span>
+              </div>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Sensor offline timeout</div>
+                <div class="sr-desc">Mark sensor offline if no data received after this time</div>
+              </div>
+              <select class="setting-select" id="s-offline-t">
+                <option value="10">10 seconds</option>
+                <option value="30" selected>30 seconds</option>
+                <option value="60">1 minute</option>
+                <option value="120">2 minutes</option>
+              </select>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Show offline sensors in monitoring</div>
+                <div class="sr-desc">Display disconnected sensors with a warning indicator</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-show-offline" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- SENSOR STATUS TABLE -->
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">Sensor Status</div>
+          <div class="card-sub">Current status of all registered sensors</div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Sensor ID</th><th>Zone</th><th>Floor</th><th>Last Reading</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="sensor-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: SYSTEM ── -->
+      <div class="tab-panel" id="tab-system">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">System Settings</div>
+            <div class="panel-sub">Data management, preferences, and system info</div>
+          </div>
+        </div>
+
+        <div class="settings-grid">
+          <!-- PREFERENCES -->
+          <div class="card">
+            <div class="card-title">Display Preferences</div>
+            <div class="card-sub">Interface and visual settings</div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Library name</div>
+                <div class="sr-desc">Displayed on reports and dashboard header</div>
+              </div>
+              <input type="text" class="setting-input" id="s-libname" value="Ateneo de Zamboanga University Library"/>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Time format</div>
+                <div class="sr-desc">12-hour or 24-hour clock display</div>
+              </div>
+              <select class="setting-select" id="s-timeformat">
+                <option value="12" selected>12-hour (2:30 PM)</option>
+                <option value="24">24-hour (14:30)</option>
+              </select>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Show dB decimal places</div>
+                <div class="sr-desc">Display noise level as 52.4 dB instead of 52 dB</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-decimals"/><span class="toggle-slider"></span></label>
+            </div>
+
+            <div class="setting-row">
+              <div class="sr-info">
+                <div class="sr-label">Compact sidebar on load</div>
+                <div class="sr-desc">Start with sidebar collapsed by default</div>
+              </div>
+              <label class="toggle"><input type="checkbox" id="s-compact"/><span class="toggle-slider"></span></label>
+            </div>
+
+            <div style="margin-top:16px;">
+              <button class="btn-primary" onclick="saveSystemSettings()">💾 Save Preferences</button>
+            </div>
+          </div>
+
+          <!-- DATA MANAGEMENT -->
+          <div class="card">
+            <div class="card-title">Data Management</div>
+            <div class="card-sub">Clear or reset system data</div>
+
+            <div class="data-action-row">
+              <div class="dar-info">
+                <div class="dar-label">Clear all alerts</div>
+                <div class="dar-desc">Permanently delete all alert log records</div>
+              </div>
+              <button class="btn-danger-sm" onclick="confirmClear('alerts')">🗑 Clear</button>
+            </div>
+
+            <div class="data-action-row">
+              <div class="dar-info">
+                <div class="dar-label">Clear resolved alerts only</div>
+                <div class="dar-desc">Remove resolved alerts, keep active ones</div>
+              </div>
+              <button class="btn-warn-sm" onclick="confirmClear('resolved')">🗑 Clear</button>
+            </div>
+
+            <div class="data-action-row">
+              <div class="dar-info">
+                <div class="dar-label">Clear all reports</div>
+                <div class="dar-desc">Delete all generated and received reports</div>
+              </div>
+              <button class="btn-danger-sm" onclick="confirmClear('reports')">🗑 Clear</button>
+            </div>
+
+            <div class="data-action-row danger-row">
+              <div class="dar-info">
+                <div class="dar-label">⚠️ Reset all data</div>
+                <div class="dar-desc">Restore all zones, users, and alerts to factory defaults</div>
+              </div>
+              <button class="btn-danger-sm" onclick="confirmClear('all')">🔄 Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- SYSTEM INFO -->
+        <div class="card" style="margin-top:16px;">
+          <div class="card-title">System Information</div>
+          <div class="card-sub">Current system status and version details</div>
+          <div class="sysinfo-grid" id="sysinfo-grid"></div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+  <!-- CONFIRM CLEAR MODAL -->
+  <div class="modal-overlay" id="clear-overlay" onclick="closeClearModal()"></div>
+  <div class="modal modal-sm" id="clear-modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="clear-title">Confirm Action</div><div class="modal-sub">This cannot be undone</div></div>
+      <button class="modal-close" onclick="closeClearModal()">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center;padding:28px 24px;">
+      <div style="font-size:40px;margin-bottom:12px;" id="clear-icon">⚠️</div>
+      <p style="font-size:14px;color:#64748b;line-height:1.7;" id="clear-msg">Are you sure?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeClearModal()">Cancel</button>
+      <button class="btn-danger" id="clear-confirm-btn" onclick="executeClear()">Confirm</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="app-data.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>

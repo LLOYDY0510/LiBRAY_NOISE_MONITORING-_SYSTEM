@@ -1,5 +1,5 @@
 // ============================================================
-//  LibraryQuiet – dashboard-admin.js  (uses AppData)
+//  LibraryQuiet – dashboard-manager.js  (uses AppData)
 // ============================================================
 
 const HOURLY = [22,28,35,48,42,38,55,61,58,45,38,30];
@@ -15,7 +15,6 @@ function statusStyle(s)  {
 function el(id)        { return document.getElementById(id); }
 function setText(id,v) { const e=el(id); if(e) e.textContent=v; }
 
-// ── CLOCK ──────────────────────────────────────────────────
 function startClock() {
   const update = () => {
     const now = new Date();
@@ -26,13 +25,12 @@ function startClock() {
 
 function toggleSidebar() { el('sidebar').classList.toggle('collapsed'); }
 
-// ── STATS ──────────────────────────────────────────────────
 function renderStats() {
-  const zones   = AppData.getZones();
-  const avg     = Math.round(zones.reduce((a,z)=>a+z.level,0)/zones.length);
-  const quiet   = zones.filter(z=>noiseStatus(z.level)==='quiet').length;
-  const loud    = zones.filter(z=>noiseStatus(z.level)==='loud').length;
-  const active  = AppData.getActiveAlerts().length;
+  const zones  = AppData.getZones();
+  const avg    = Math.round(zones.reduce((a,z)=>a+z.level,0)/zones.length);
+  const quiet  = zones.filter(z=>noiseStatus(z.level)==='quiet').length;
+  const loud   = zones.filter(z=>noiseStatus(z.level)==='loud').length;
+  const active = AppData.getActiveAlerts().length;
 
   setText('s-avg',    avg + ' dB');
   setText('s-quiet',  quiet + ' / ' + zones.length);
@@ -41,50 +39,23 @@ function renderStats() {
 
   const tr = el('s-avg-trend');
   if (tr) {
-    if (avg<40)      { tr.textContent='↓ All zones in good range';  tr.className='stat-trend trend-green'; }
-    else if (avg<60) { tr.textContent='→ Moderate overall level';   tr.className='stat-trend trend-blue'; }
-    else             { tr.textContent='↑ Elevated noise detected';  tr.className='stat-trend trend-red'; }
+    if (avg<40)      { tr.textContent='↓ All zones in good range'; tr.className='stat-trend trend-green'; }
+    else if (avg<60) { tr.textContent='→ Moderate overall level';  tr.className='stat-trend trend-blue'; }
+    else             { tr.textContent='↑ Elevated noise detected'; tr.className='stat-trend trend-red'; }
   }
   const ll = el('s-loud-lbl');
   if (ll) {
     ll.textContent = loud>0 ? `↑ ${loud} zone${loud>1?'s':''} need attention` : '✓ No loud zones';
     ll.className   = loud>0 ? 'stat-trend trend-red' : 'stat-trend trend-green';
   }
-
-  // unread reports notification
-  const unread = AppData.getUnreadReports();
-  if (unread.length > 0) showReportNotif(unread);
 }
 
-// ── REPORT NOTIFICATION BANNER ─────────────────────────────
-function showReportNotif(unread) {
-  let banner = el('report-notif');
-  if (!banner) {
-    banner = document.createElement('div');
-    banner.id = 'report-notif';
-    banner.style.cssText = `
-      background:linear-gradient(135deg,#1d4ed8,#3b82f6);
-      color:#fff; padding:12px 20px; border-radius:12px;
-      margin-bottom:16px; display:flex; justify-content:space-between;
-      align-items:center; font-size:13px; font-weight:600;
-      box-shadow:0 4px 16px rgba(29,78,216,.3); animation:pageIn .3s ease;
-    `;
-    el('content').insertBefore(banner, el('content').firstChild);
-  }
-  banner.innerHTML = `
-    <span>📋 You have <strong>${unread.length} unread report${unread.length>1?'s':''}</strong> from the Library Manager</span>
-    <a href="reports.html" style="background:#fff;color:#1d4ed8;padding:6px 14px;border-radius:8px;font-weight:700;text-decoration:none;font-size:12px;">View Reports →</a>
-  `;
-}
-
-// ── ZONE BARS ──────────────────────────────────────────────
 function renderZoneBars() {
   const wrap = el('zone-bars'); if (!wrap) return;
   const zones = AppData.getZones();
   wrap.innerHTML = zones.map(z => {
-    const s  = noiseStatus(z.level), sc = statusStyle(s);
-    const pct = Math.min(100,(z.level/90)*100).toFixed(1);
-    const col = noiseColor(z.level);
+    const s=noiseStatus(z.level), sc=statusStyle(s);
+    const pct=Math.min(100,(z.level/90)*100).toFixed(1), col=noiseColor(z.level);
     return `<div class="zone-row">
       <div class="zone-meta">
         <div class="zone-left">
@@ -102,7 +73,6 @@ function renderZoneBars() {
   }).join('');
 }
 
-// ── CHART ──────────────────────────────────────────────────
 function renderChart() {
   const wrap = el('chart-wrap'); if (!wrap) return;
   const max = Math.max(...HOURLY);
@@ -116,7 +86,6 @@ function renderChart() {
   }).join('');
 }
 
-// ── ALERTS TABLE ───────────────────────────────────────────
 function renderAlerts() {
   const tbody = el('alerts-tbody'); if (!tbody) return;
   const alerts = AppData.getAlerts().slice(0,5);
@@ -132,7 +101,6 @@ function renderAlerts() {
   }).join('');
 }
 
-// ── SUMMARY ────────────────────────────────────────────────
 function renderSummary() {
   const zones = AppData.getZones();
   setText('sum-quiet',    zones.filter(z=>noiseStatus(z.level)==='quiet').length);
@@ -140,19 +108,14 @@ function renderSummary() {
   setText('sum-loud',     zones.filter(z=>noiseStatus(z.level)==='loud').length);
 }
 
-// ── LIVE UPDATE ────────────────────────────────────────────
 function startLiveUpdate() {
   setInterval(() => {
-    // Simulate noise fluctuation and save to AppData
-    const updated = AppData.getZones().map(z => ({
-      ...z, level: Math.max(10, Math.min(90, z.level + (Math.random()-.5)*6))
-    }));
-    AppData.saveZones(updated);
+    // Manager reads from AppData — does NOT overwrite (admin/monitoring updates it)
     renderStats(); renderZoneBars(); renderSummary();
+    AppData.updateNotifBadge();
   }, 2000);
 }
 
-// ── INIT ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   AppData.applySession();
   startClock();
